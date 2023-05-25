@@ -24,7 +24,6 @@ function App() {
 
 	const invoices = useAppSelector((state) => {
 		const { invoices, paid, type } = state.invoicesReducer;
-		console.log(invoices, paid);
 		if (type === 'all') {
 			return [...invoices, ...paid].sort((a, b) => +b.sum - +a.sum);
 		}

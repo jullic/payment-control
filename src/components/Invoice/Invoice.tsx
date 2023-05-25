@@ -37,6 +37,7 @@ export const Invoice: FC<IInvoiceProps> = ({
 	};
 
 	const onUpdateHandler = () => {
+		console.log(111);
 		dispatch(invoicesActions.getInvoice(invoice));
 		dispatch(changeModal('update'));
 	};
