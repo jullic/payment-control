@@ -13,8 +13,13 @@ export const Invoices: FC<IInvoicesProps> = ({
 	...props
 }) => {
 	const sum = invoices.reduce((prev, invoice) => prev + +invoice.sum, 0);
-
 	const copyText = getInvoiceCopyText(invoices, date);
+
+	const [day, month, year] = date.split('.');
+	const currentDate = new Date(+year, +month - 1, +day);
+	const isToday =
+		currentDate.getTime() - Date.now() > 0 &&
+		currentDate.getTime() - Date.now() < 1000 * 60 * 60 * 24;
 
 	const onCopyHandler = () => {
 		navigator.clipboard.writeText(copyText);
@@ -23,7 +28,7 @@ export const Invoices: FC<IInvoicesProps> = ({
 	return (
 		<div className={classNames(styles.root, className)} {...props}>
 			<div className={classNames(styles.header)}>
-				<h2>{date}</h2>
+				<h2>{isToday ? 'Сегодня' : date}</h2>
 				<Button onClick={onCopyHandler}>Скорпировать</Button>
 			</div>
 			<div className={classNames(styles.invoices)}>
