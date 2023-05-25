@@ -15,10 +15,11 @@ import { changeSearch } from './redux/slices/search.slice';
 import { getDateBySplit } from './utils/date.utils';
 import { Invoices } from './components/Invoices/Invoices';
 import { useEffect } from 'react';
+import { UpdateModal } from './components/UpdateModal/UpdateModal';
 
 function App() {
 	const dispatch = useAppDispatch();
-	const { type } = useAppSelector((state) => state.invoicesReducer);
+	const { type, invoice } = useAppSelector((state) => state.invoicesReducer);
 	const { modal } = useAppSelector((state) => state.modalsReducer);
 	const { supplier } = useAppSelector((state) => state.suppliersReducer);
 
@@ -104,6 +105,7 @@ function App() {
 			))}
 			{modal === 'choice' && <ChoiceModal />}
 			{modal === 'create' && <CreateModal supplier={supplier} />}
+			{modal === 'update' && invoice && <UpdateModal invoice={invoice} />}
 		</div>
 	);
 }

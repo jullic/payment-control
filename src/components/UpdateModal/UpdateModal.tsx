@@ -26,12 +26,12 @@ export const UpdateModal: FC<IUpdateModalProps> = ({
 
 	const [name, setName] = useState(invoice.name || '');
 	const [inn, setInn] = useState(invoice.inn || '');
-	const [sum, setSum] = useState('');
-	const [nds, setNds] = useState('');
-	const [invoiceNumber, setInvoiceNumber] = useState('');
+	const [sum, setSum] = useState(invoice.sum);
+	const [nds, setNds] = useState(invoice.nds);
+	const [invoiceNumber, setInvoiceNumber] = useState(invoice.invoiceNumber);
 	const [startDate, setStartDate] = useState(today);
 	const [timeout, setTimeout] = useState(invoice.timeout || '');
-	const [lastDate, setLastDate] = useState('');
+	const [lastDate, setLastDate] = useState(invoice.lastDate);
 
 	const dispatch = useAppDispatch();
 	const { suppliers } = useAppSelector((state) => state.suppliersReducer);
@@ -145,12 +145,12 @@ export const UpdateModal: FC<IUpdateModalProps> = ({
 					/>
 					<Input
 						value={invoiceNumber}
-						autoFocus
 						onChange={(e) => setInvoiceNumber(e.target.value)}
 						placeholder='Номер накладной'
 					/>
 					<Input
 						value={sum}
+						autoFocus
 						onChange={(e) => setSum(e.target.value)}
 						type='number'
 						placeholder='Сумма'

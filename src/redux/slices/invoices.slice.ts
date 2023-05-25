@@ -43,7 +43,7 @@ export const updateInvoice = createAsyncThunk<any, IInvoice>(
 	'invoices/createInvoices',
 	async (invoice, thunkApi) => {
 		try {
-			const { data } = await axios.post(
+			const { data } = await axios.patch(
 				`http://localhost:3300/invoices/${invoice.id}`,
 				{
 					...invoice,
