@@ -5,6 +5,8 @@ import styles from './Invoices.module.css';
 import { Invoice } from '../Invoice/Invoice';
 import { Button } from '../Button/Button';
 import { IInvoice } from '../../interfaces/invoice.interface';
+import { useAppSelector } from '../../hooks/redux.hooks';
+import { getDateBySplit } from '../../utils/date.utils';
 
 export const Invoices: FC<IInvoicesProps> = ({
 	className,
@@ -13,7 +15,7 @@ export const Invoices: FC<IInvoicesProps> = ({
 	...props
 }) => {
 	const sum = invoices.reduce((prev, invoice) => prev + +invoice.sum, 0);
-	const copyText = getInvoiceCopyText(invoices, date);
+	const { myCompanies } = useAppSelector((state) => state.suppliersReducer);
 
 	const [day, month, year] = date.split('.');
 	const currentDate = new Date(+year, +month - 1, +day);
@@ -22,6 +24,7 @@ export const Invoices: FC<IInvoicesProps> = ({
 		currentDate.getTime() - Date.now() < 1000 * 60 * 60 * 24;
 
 	const onCopyHandler = () => {
+		const copyText = getInvoiceCopyText(invoices, date, myCompanies);
 		navigator.clipboard.writeText(copyText);
 	};
 
@@ -49,15 +52,43 @@ export const Invoices: FC<IInvoicesProps> = ({
 	);
 };
 
-const getInvoiceCopyText = (invoices: IInvoice[], date: string) => {
-	let text = '';
-	invoices.forEach(
-		(invoice) =>
-			(text =
-				text +
-				'\n\n\n' +
-				`${invoice.name}, ИНН: ${invoice.inn}, от ${date}, № ${invoice.invoiceNumber}, Сумма: ${invoice.sum} руб, НДС: ${invoice.nds} руб`)
+const getInvoiceCopyText = (
+	invoices: IInvoice[],
+	date: string,
+	myCompanies: string[]
+) => {
+	let arrCompany = myCompanies.reduce<{ name: string; values: string[] }[]>(
+		(prev, comp) => {
+			console.log(prev, comp);
+			prev.push({ name: comp, values: [] });
+			return prev;
+		},
+		[]
 	);
 
+	invoices.forEach((invoice) => {
+		for (let i = 0; i < arrCompany.length; i++) {
+			if (invoice.myCompany === arrCompany[i].name) {
+				const text = `${invoice.name}, ИНН: ${invoice.inn}, от ${
+					// getDateBySplit(invoice.startDate)
+					// 	.toLocaleString('ru')
+					// 	.split(', ')[0]
+					date
+				}, № ${invoice.invoiceNumber}, Сумма: ${
+					invoice.sum
+				} руб, НДС: ${invoice.nds} руб`;
+				arrCompany[i].values.push(text);
+			}
+		}
+	});
+	let text = '';
+
+	for (const comp of arrCompany) {
+		if (comp.values.length === 0) {
+			continue;
+		}
+		text = text + `${comp.name}: \n\n\t${comp.values.join('\n\t')}`;
+		text = text + '\n\n';
+	}
 	return text;
 };

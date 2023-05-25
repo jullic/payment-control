@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useRef, useState } from 'react';
+import React, { ChangeEvent, FC, useEffect, useRef, useState } from 'react';
 import classNames from 'classnames';
 import { IUpdateModalProps } from './UpdateModal.props';
 import styles from './UpdateModal.module.css';
@@ -25,6 +25,11 @@ export const UpdateModal: FC<IUpdateModalProps> = ({
 	const today = getDateByNumber(new Date().getTime());
 
 	const [name, setName] = useState(invoice.name || '');
+	const [myCompany, setMyCompany] = useState(
+		invoice.myCompany ||
+			window.localStorage.getItem('myCompany') ||
+			'ООО Оптима'
+	);
 	const [inn, setInn] = useState(invoice.inn || '');
 	const [sum, setSum] = useState(invoice.sum);
 	const [nds, setNds] = useState(invoice.nds);
@@ -32,17 +37,21 @@ export const UpdateModal: FC<IUpdateModalProps> = ({
 	const [startDate, setStartDate] = useState(today);
 	const [timeout, setTimeout] = useState(invoice.timeout || '');
 	const [lastDate, setLastDate] = useState(invoice.lastDate);
+	const { myCompanies } = useAppSelector((state) => state.suppliersReducer);
 
 	const dispatch = useAppDispatch();
 	const { suppliers } = useAppSelector((state) => state.suppliersReducer);
 
 	const onUpdateInvoiceHandler = () => {
+		console.log(myCompany);
+
 		if (
 			!Number.isNaN(+sum) &&
 			!Number.isNaN(+nds) &&
 			!Number.isNaN(+timeout) &&
 			name &&
 			inn &&
+			myCompany &&
 			sum &&
 			nds &&
 			invoiceNumber &&
@@ -58,6 +67,7 @@ export const UpdateModal: FC<IUpdateModalProps> = ({
 					lastDate,
 					name,
 					nds,
+					myCompany,
 					startDate,
 					sum,
 					status: invoice.status,
@@ -87,6 +97,10 @@ export const UpdateModal: FC<IUpdateModalProps> = ({
 				})
 			);
 		}
+	};
+
+	const onChangeCompany = (e: ChangeEvent<HTMLSelectElement>) => {
+		setMyCompany(e.target.value);
 	};
 
 	useEffect(() => {
@@ -122,6 +136,8 @@ export const UpdateModal: FC<IUpdateModalProps> = ({
 		}
 	}, [startDate]);
 
+	console.log(myCompany);
+
 	return (
 		<Portal className={classNames(styles.root, className)} {...props}>
 			<Modal onClick={(e) => dispatch(changeModal('none'))}>
@@ -143,6 +159,17 @@ export const UpdateModal: FC<IUpdateModalProps> = ({
 						}}
 						placeholder='ИНН'
 					/>
+					<select
+						onChange={onChangeCompany}
+						value={myCompany}
+						className={classNames(styles.select)}
+					>
+						{myCompanies.map((comp) => (
+							<option key={comp} value={comp}>
+								{comp}
+							</option>
+						))}
+					</select>
 					<Input
 						value={invoiceNumber}
 						onChange={(e) => setInvoiceNumber(e.target.value)}

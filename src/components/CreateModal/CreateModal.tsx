@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useRef, useState } from 'react';
+import React, { ChangeEvent, FC, useEffect, useRef, useState } from 'react';
 import classNames from 'classnames';
 import { ICreateModalProps } from './CreateModal.props';
 import styles from './CreateModal.module.css';
@@ -25,6 +25,13 @@ export const CreateModal: FC<ICreateModalProps> = ({
 	const today = getDateByNumber(new Date().getTime());
 
 	const [name, setName] = useState(supplier?.name || '');
+	const { suppliers } = useAppSelector((state) => state.suppliersReducer);
+	const { myCompanies } = useAppSelector((state) => state.suppliersReducer);
+	const [myCompany, setMyCompany] = useState(
+		window.localStorage.getItem('myCompany') ||
+			myCompanies[0] ||
+			'ООО Оптима'
+	);
 	const [inn, setInn] = useState(supplier?.inn || '');
 	const [sum, setSum] = useState('');
 	const [nds, setNds] = useState('');
@@ -34,7 +41,6 @@ export const CreateModal: FC<ICreateModalProps> = ({
 	const [lastDate, setLastDate] = useState('');
 
 	const dispatch = useAppDispatch();
-	const { suppliers } = useAppSelector((state) => state.suppliersReducer);
 
 	const onCreateInvoiceHandler = () => {
 		if (
@@ -58,6 +64,7 @@ export const CreateModal: FC<ICreateModalProps> = ({
 					lastDate,
 					name,
 					nds,
+					myCompany,
 					startDate,
 					sum,
 					status: 'invoice',
@@ -87,6 +94,11 @@ export const CreateModal: FC<ICreateModalProps> = ({
 				})
 			);
 		}
+	};
+
+	const onChangeCompany = (e: ChangeEvent<HTMLSelectElement>) => {
+		setMyCompany(e.target.value);
+		window.localStorage.setItem('myCompany', e.target.value);
 	};
 
 	useEffect(() => {
@@ -143,6 +155,17 @@ export const CreateModal: FC<ICreateModalProps> = ({
 						}}
 						placeholder='ИНН'
 					/>
+					<select
+						onChange={onChangeCompany}
+						value={myCompany}
+						className={classNames(styles.select)}
+					>
+						{myCompanies.map((comp) => (
+							<option key={comp} value={comp}>
+								{comp}
+							</option>
+						))}
+					</select>
 					<Input
 						value={invoiceNumber}
 						autoFocus

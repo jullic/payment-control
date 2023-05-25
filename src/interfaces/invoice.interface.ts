@@ -1,5 +1,6 @@
 export interface IInvoice {
 	id: number;
+	myCompany: string;
 	name: string;
 	inn: string;
 	startDate: string;

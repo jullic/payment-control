@@ -20,14 +20,29 @@ export const fetchSuppliers = createAsyncThunk<any, undefined>(
 	}
 );
 
+export const fetchMyCompanies = createAsyncThunk<any, undefined>(
+	'suppliers/fetchMyCompanies',
+	async (_, thunkApi) => {
+		try {
+			const { data } = await axios.get<ISupplier[]>(
+				`http://localhost:3300/companies`
+			);
+			return data;
+		} catch (error) {
+			if (error instanceof AxiosError) {
+				return thunkApi.rejectWithValue(
+					error.response?.data || 'error'
+				);
+			}
+		}
+	}
+);
+
 export const createSuppliers = createAsyncThunk<any, ISupplier>(
 	'suppliers/createSuppliers',
 	async (body, thunkApi) => {
 		try {
-			const { data } = await axios.post(
-				`http://localhost:3300/suppliers`,
-				body
-			);
+			await axios.post(`http://localhost:3300/suppliers`, body);
 			const newSuppliers = await thunkApi.dispatch(fetchSuppliers());
 
 			return newSuppliers;
@@ -43,12 +58,14 @@ interface ISuppliersSliceState {
 	status: 'loading' | 'idle' | 'error';
 	suppliers: ISupplier[];
 	supplier: ISupplier | null;
+	myCompanies: string[];
 }
 
 const initialState: ISuppliersSliceState = {
 	status: 'idle',
 	suppliers: [],
 	supplier: null,
+	myCompanies: [],
 };
 
 export const suppliersSlice = createSlice({
@@ -84,19 +101,12 @@ export const suppliersSlice = createSlice({
 				}
 			);
 
-		builder
-			.addCase(
-				createSuppliers.pending,
-				(state, action: PayloadAction<any>) => {}
-			)
-			.addCase(
-				createSuppliers.fulfilled,
-				(state, action: PayloadAction<any>) => {}
-			)
-			.addCase(
-				createSuppliers.rejected,
-				(state, action: PayloadAction<any>) => {}
-			);
+		builder.addCase(
+			fetchMyCompanies.fulfilled,
+			(state, action: PayloadAction<any>) => {
+				state.myCompanies = action.payload;
+			}
+		);
 	},
 });
 
