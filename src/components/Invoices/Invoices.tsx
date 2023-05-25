@@ -55,8 +55,8 @@ const getInvoiceCopyText = (invoices: IInvoice[], date: string) => {
 		(invoice) =>
 			(text =
 				text +
-				'\n\n\n' +
-				`${invoice.name}, ИНН: ${invoice.inn}, от ${date}, № ${invoice.invoiceNumber}, Сумма: ${invoice.sum} руб, НДС: ${invoice.nds} руб`)
+				`${invoice.name}, ИНН: ${invoice.inn}, от ${date}, № ${invoice.invoiceNumber}, Сумма: ${invoice.sum} руб, НДС: ${invoice.nds} руб`) +
+			'\n\n'
 	);
 
 	return text;
