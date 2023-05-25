@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useRef, useState } from 'react';
+import React, { FC, MouseEvent, useEffect, useRef, useState } from 'react';
 import classNames from 'classnames';
 import { IInvoiceProps } from './Invoice.props';
 import styles from './Invoice.module.css';
@@ -9,8 +9,10 @@ import {
 	changeInvoiceType,
 	deleteInvoices,
 	deletePaid,
+	invoicesActions,
 } from '../../redux/slices/invoices.slice';
 import { Button } from '../Button/Button';
+import { changeModal } from '../../redux/slices/modals.slice';
 
 export const Invoice: FC<IInvoiceProps> = ({
 	className,
@@ -25,12 +27,18 @@ export const Invoice: FC<IInvoiceProps> = ({
 	const dispatch = useAppDispatch();
 	const isFirstRender = useRef(true);
 
-	const onDeleteHandler = () => {
+	const onDeleteHandler = (e: MouseEvent<HTMLButtonElement>) => {
+		e.stopPropagation();
 		if (invoice.status === 'invoice') {
 			dispatch(deleteInvoices(invoice.id + ''));
 		} else {
 			dispatch(deletePaid(invoice.id + ''));
 		}
+	};
+
+	const onUpdateHandler = () => {
+		dispatch(invoicesActions.getInvoice(invoice));
+		dispatch(changeModal('update'));
 	};
 
 	useEffect(() => {
@@ -41,7 +49,10 @@ export const Invoice: FC<IInvoiceProps> = ({
 	}, [updatedStatus]);
 
 	return (
-		<div className={classNames(styles.wrap)}>
+		<div
+			onDoubleClick={onUpdateHandler}
+			className={classNames(styles.wrap)}
+		>
 			<div className={classNames(styles.root, className)} {...props}>
 				<span>
 					<input

@@ -1,6 +1,6 @@
 .root {
 	display: grid;
-	grid-template-columns: 3fr repeat(2, 2fr) 1fr repeat(2, 2fr);
+	grid-template-columns: 3fr repeat(5, 2fr);
 	width: 100%;
 }
 
@@ -25,7 +25,15 @@
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
+	padding: 0 12px;
+	border-radius: 2px;
+	cursor: pointer;
 }
+
+.wrap:hover {
+	background-color: #ddd;
+}
+
 .delete {
 	width: min-content;
 }

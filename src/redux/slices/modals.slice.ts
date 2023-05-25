@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 interface IModalsSliceState {
-	modal: 'choice' | 'create' | 'none';
+	modal: 'choice' | 'create' | 'update' | 'none';
 }
 
 const initialState: IModalsSliceState = {
@@ -14,7 +14,7 @@ export const modalsSlice = createSlice({
 	reducers: {
 		changeModal(
 			state,
-			action: PayloadAction<'choice' | 'create' | 'none'>
+			action: PayloadAction<'choice' | 'create' | 'update' | 'none'>
 		) {
 			state.modal = action.payload;
 		},

@@ -39,6 +39,29 @@ export const createInvoices = createAsyncThunk<any, IInvoice>(
 	}
 );
 
+export const updateInvoice = createAsyncThunk<any, IInvoice>(
+	'invoices/createInvoices',
+	async (invoice, thunkApi) => {
+		try {
+			const { data } = await axios.post(
+				`http://localhost:3300/invoices/${invoice.id}`,
+				{
+					...invoice,
+				}
+			);
+			await thunkApi.dispatch(fetchPaid());
+			await thunkApi.dispatch(fetchInvoices());
+			return data;
+		} catch (error) {
+			if (error instanceof AxiosError) {
+				return thunkApi.rejectWithValue(
+					error.response?.data || 'error'
+				);
+			}
+		}
+	}
+);
+
 export const deleteInvoices = createAsyncThunk<any, string>(
 	'invoices/deleteInvoices',
 	async (id, thunkApi) => {
@@ -155,6 +178,7 @@ interface IInvoicesSliceState {
 	invoices: IInvoice[];
 	paid: IInvoice[];
 	type: 'all' | 'paid' | 'invoices';
+	invoice: null | IInvoice;
 }
 
 const initialState: IInvoicesSliceState = {
@@ -162,6 +186,7 @@ const initialState: IInvoicesSliceState = {
 	invoices: [],
 	paid: [],
 	type: 'invoices',
+	invoice: null,
 };
 
 export const invoicesSlice = createSlice({
@@ -170,6 +195,9 @@ export const invoicesSlice = createSlice({
 	reducers: {
 		changeType(state, action: PayloadAction<'all' | 'paid' | 'invoices'>) {
 			state.type = action.payload;
+		},
+		getInvoice(state, action: PayloadAction<IInvoice | null>) {
+			state.invoice = action.payload;
 		},
 	},
 	extraReducers: (builder) => {
