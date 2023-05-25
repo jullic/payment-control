@@ -1,0 +1,52 @@
+.root {
+	padding: 24px 0;
+	display: flex;
+	flex-direction: column;
+	gap: 32px;
+	margin-top: 48px;
+	border-bottom: 1px solid var(--black-color);
+}
+
+.root h2 {
+	color: var(--primary-color);
+}
+
+.invoices {
+	display: flex;
+	flex-direction: column;
+}
+
+.footer {
+	margin-top: 24px;
+	display: flex;
+	flex-direction: column;
+	gap: 16px;
+}
+
+.sum {
+	font-size: 22px;
+	font-weight: bold;
+}
+.sum span {
+	font-weight: bold;
+	color: var(--primary-color);
+}
+
+.header {
+	margin-top: 24px;
+	display: flex;
+	align-items: center;
+	gap: 40px;
+}
+
+.count {
+	font-size: 22px;
+	display: flex;
+	gap: 8px;
+	font-weight: bold;
+}
+
+.count span {
+	color: var(--primary-color);
+	font-weight: bold;
+}

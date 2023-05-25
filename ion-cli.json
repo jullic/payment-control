@@ -1,0 +1,31 @@
+{
+	"plugins": [
+		"react",
+		"templater"
+	],
+	"saves": [
+		".ion"
+	],
+	"react": {
+		"libraryStyleWrapperFn": "classNames",
+		"variableName": "styles",
+		"excludes": [
+			"node_modules"
+		]
+	},
+	"templater": {
+		"templatesPath": ".ion/templates",
+		"layoutsPath": ".ion/layouts",
+		"defaultOutputPath": "src",
+		"wordForReplace": "FILENAME",
+		"npmPackages": [
+			"classnames",
+			"axios",
+			"react-router-dom"
+		],
+		"npmDevPackages": [
+			"typescript-plugin-css-modules"
+		],
+		"packageManager": "npm"
+	}
+}

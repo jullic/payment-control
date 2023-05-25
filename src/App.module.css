@@ -1,0 +1,63 @@
+.btns {
+	display: flex;
+	gap: 8px;
+}
+
+.btns button {
+	border-radius: 2px;
+	border: 1px solid var(--black-color);
+}
+
+.btns button.active {
+	background: #aaa;
+	border: 1px solid var(--black-color);
+}
+
+.btns button:not(.active):hover {
+	filter: brightness(0.8);
+}
+
+.btns button:active {
+	filter: brightness(0.9);
+}
+
+.sum {
+	margin-top: 48px;
+	font-size: 32px;
+	font-weight: bold;
+}
+
+.sum b {
+	color: var(--primary-color);
+}
+
+.create {
+	position: fixed;
+	right: 30px;
+	top: 30px;
+	background: var(--black-color);
+	box-shadow: 0 0 10px 2px rgba(0, 0, 0, 0.3);
+	color: white;
+	border: none;
+	padding: 16px 48px;
+	font-size: 16px;
+}
+
+.create:hover {
+	transform: scale(1.1);
+}
+
+.header {
+	display: flex;
+	flex-direction: column;
+	gap: 24px;
+}
+.count {
+	font-size: 32px;
+	font-weight: bold;
+}
+
+.count span {
+	font-weight: bold;
+	color: var(--primary-color);
+}

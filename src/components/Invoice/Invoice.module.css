@@ -1,0 +1,31 @@
+.root {
+	display: grid;
+	grid-template-columns: 3fr repeat(2, 2fr) 1fr repeat(2, 2fr);
+	width: 100%;
+}
+
+.root span {
+	display: flex;
+	gap: 8px;
+	align-items: center;
+}
+
+.root span:first-child {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+}
+
+.root label {
+	cursor: pointer;
+	padding: 16px 0;
+}
+
+.wrap {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+.delete {
+	width: min-content;
+}
