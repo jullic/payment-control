@@ -22,7 +22,7 @@ export const UpdateModal: FC<IUpdateModalProps> = ({
 	...props
 }) => {
 	const isFirstRender = useRef(true);
-	const today = getDateByNumber(new Date().getTime());
+	// const today = getDateByNumber(new Date().getTime());
 
 	const [name, setName] = useState(invoice.name || '');
 	const [myCompany, setMyCompany] = useState(
@@ -34,7 +34,7 @@ export const UpdateModal: FC<IUpdateModalProps> = ({
 	const [sum, setSum] = useState(invoice.sum);
 	const [nds, setNds] = useState(invoice.nds);
 	const [invoiceNumber, setInvoiceNumber] = useState(invoice.invoiceNumber);
-	const [startDate, setStartDate] = useState(today);
+	const [startDate, setStartDate] = useState(invoice.startDate);
 	const [timeout, setTimeout] = useState(invoice.timeout || '');
 	const [lastDate, setLastDate] = useState(invoice.lastDate);
 	const { myCompanies } = useAppSelector((state) => state.suppliersReducer);
