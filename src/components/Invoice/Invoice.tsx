@@ -69,9 +69,14 @@ export const Invoice: FC<IInvoiceProps> = ({
 							}
 						}}
 					/>
-					<label htmlFor={invoice.id + ''}>
-						<b>{invoice.name}</b>
-					</label>
+					<div className={classNames(styles.firm)}>
+						<label htmlFor={invoice.id + ''}>
+							<b>{invoice.name}</b>
+							<div className={classNames(styles.my)}>
+								{invoice.myCompany}
+							</div>
+						</label>
+					</div>
 				</span>
 				<span>
 					ИНН: <b>{invoice.inn}</b>

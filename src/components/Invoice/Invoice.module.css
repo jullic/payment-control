@@ -37,3 +37,14 @@
 .delete {
 	width: min-content;
 }
+
+.firm {
+	display: flex;
+	flex-direction: column;
+	gap: 4px;
+}
+
+.my {
+	color: var(--black-color);
+	opacity: 0.4;
+}

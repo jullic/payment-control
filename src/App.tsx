@@ -10,7 +10,7 @@ import {
 import { CreateModal } from './components/CreateModal/CreateModal';
 import { ChoiceModal } from './components/ChoiceModal/ChoiceModal';
 import { changeModal } from './redux/slices/modals.slice';
-import { getSupplier } from './redux/slices/suppliers.slice';
+import { fetchMyCompanies, getSupplier } from './redux/slices/suppliers.slice';
 import { changeSearch } from './redux/slices/search.slice';
 import { getDateBySplit } from './utils/date.utils';
 import { Invoices } from './components/Invoices/Invoices';
@@ -42,6 +42,10 @@ function App() {
 	const getDateInvoices = (date: string) => {
 		return invoices.filter((invoice) => invoice.lastDate === date);
 	};
+
+	useEffect(() => {
+		dispatch(fetchMyCompanies());
+	}, []);
 
 	useEffect(() => {
 		dispatch(fetchInvoices());
