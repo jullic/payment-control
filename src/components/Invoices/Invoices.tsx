@@ -32,7 +32,7 @@ export const Invoices: FC<IInvoicesProps> = ({
 		<div className={classNames(styles.root, className)} {...props}>
 			<div className={classNames(styles.header)}>
 				<h2>{isToday ? 'Сегодня' : date}</h2>
-				<Button onClick={onCopyHandler}>Скорпировать</Button>
+				<Button onClick={onCopyHandler}>Скопировать</Button>
 			</div>
 			<div className={classNames(styles.invoices)}>
 				{invoices.map((invoice) => (
