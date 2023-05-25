@@ -20,8 +20,10 @@ export const Invoices: FC<IInvoicesProps> = ({
 	const [day, month, year] = date.split('.');
 	const currentDate = new Date(+year, +month - 1, +day);
 	const isToday =
-		currentDate.getTime() - Date.now() > 0 &&
-		currentDate.getTime() - Date.now() < 1000 * 60 * 60 * 24;
+		currentDate.toLocaleString('ru').split(', ')[0] ===
+		new Date().toLocaleString('ru').split(', ')[0];
+
+	console.log(isToday, currentDate, date);
 
 	const onCopyHandler = () => {
 		const copyText = getInvoiceCopyText(invoices, date, myCompanies);
