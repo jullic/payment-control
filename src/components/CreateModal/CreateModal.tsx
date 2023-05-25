@@ -39,8 +39,8 @@ export const CreateModal: FC<ICreateModalProps> = ({
 	const onCreateInvoiceHandler = () => {
 		if (
 			!Number.isNaN(+sum) &&
-			!Number.isNaN(nds) &&
-			!Number.isNaN(timeout) &&
+			!Number.isNaN(+nds) &&
+			!Number.isNaN(+timeout) &&
 			name &&
 			inn &&
 			sum &&
@@ -138,7 +138,7 @@ export const CreateModal: FC<ICreateModalProps> = ({
 						value={inn}
 						onChange={(e) => {
 							setInn(
-								e.target.value.replace(/[^a-zA-Zа-яА-Я]/gim, '')
+								e.target.value.replace(/[a-zA-Zа-яА-Я]/gim, '')
 							);
 						}}
 						placeholder='ИНН'
