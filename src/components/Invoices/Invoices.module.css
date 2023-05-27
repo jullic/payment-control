@@ -3,8 +3,12 @@
 	display: flex;
 	flex-direction: column;
 	gap: 32px;
-	margin-top: 48px;
+	margin-top: 16px;
 	border-bottom: 1px solid var(--black-color);
+}
+
+.root.today {
+	border-bottom: 2px solid var(--primary-color);
 }
 
 .root h2 {
@@ -26,6 +30,9 @@
 .sum {
 	font-size: 22px;
 	font-weight: bold;
+	display: flex;
+	flex-direction: column;
+	gap: 12px;
 }
 .sum span {
 	font-weight: bold;
@@ -42,6 +49,7 @@
 .count {
 	font-size: 22px;
 	display: flex;
+	flex-direction: column;
 	gap: 8px;
 	font-weight: bold;
 }
@@ -49,4 +57,26 @@
 .count span {
 	color: var(--primary-color);
 	font-weight: bold;
+}
+
+.total {
+	margin-bottom: 8px;
+}
+.count .total {
+	margin-top: 24px;
+}
+.company {
+	font-size: 18px;
+	font-weight: normal;
+	padding-left: 24px;
+	font-style: italic;
+}
+
+.count .company {
+}
+
+.companies {
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
 }

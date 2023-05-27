@@ -39,8 +39,9 @@
 	box-shadow: 0 0 10px 2px rgba(0, 0, 0, 0.3);
 	color: white;
 	border: none;
-	padding: 16px 48px;
+	padding: 12px 48px !important;
 	font-size: 16px;
+	border-radius: 2px;
 }
 
 .create:hover {
@@ -51,6 +52,8 @@
 	display: flex;
 	flex-direction: column;
 	gap: 24px;
+	padding-bottom: 24px;
+	border-bottom: 1px solid var(--black-color);
 }
 .count {
 	font-size: 32px;
@@ -60,4 +63,31 @@
 .count span {
 	font-weight: bold;
 	color: var(--primary-color);
+}
+
+.total {
+	margin-bottom: 8px;
+}
+.count .total {
+	margin-top: 24px;
+}
+.company {
+	font-size: 18px;
+	font-weight: normal;
+	padding-left: 24px;
+	font-style: italic;
+}
+
+.company span {
+	color: var(--primary-color);
+	font-weight: bold;
+}
+
+.count .company {
+}
+
+.companies {
+	display: flex;
+	flex-direction: column;
+	gap: 12px;
 }

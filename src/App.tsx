@@ -22,17 +22,34 @@ function App() {
 	const { type, invoice } = useAppSelector((state) => state.invoicesReducer);
 	const { modal } = useAppSelector((state) => state.modalsReducer);
 	const { supplier } = useAppSelector((state) => state.suppliersReducer);
-
 	const invoices = useAppSelector((state) => {
 		const { invoices, paid, type } = state.invoicesReducer;
 		if (type === 'all') {
-			return [...invoices, ...paid].sort((a, b) => +b.sum - +a.sum);
+			return [...invoices, ...paid].sort((a, b) => {
+				if (a.name.toLowerCase() < b.name.toLowerCase()) {
+					return -1;
+				}
+				return 1;
+			});
 		}
 		if (type === 'invoices') {
-			return [...invoices].sort((a, b) => +b.sum - +a.sum);
+			return [...invoices].sort((a, b) => {
+				if (a.name.toLowerCase() < b.name.toLowerCase()) {
+					return -1;
+				}
+				return 1;
+			});
 		}
-		return [...paid].sort((a, b) => +b.sum - +a.sum);
+		return [...paid].sort((a, b) => {
+			if (a.name.toLowerCase() < b.name.toLowerCase()) {
+				return -1;
+			}
+			return 1;
+		});
 	});
+	const companies = Array.from(
+		new Set(invoices.map((invoice) => invoice.myCompany))
+	);
 	const sum = invoices.reduce((prev, invoice) => prev + +invoice.sum, 0);
 
 	const dates = Array.from(
@@ -92,10 +109,57 @@ function App() {
 			</div>
 			<div className={classNames(styles.header)}>
 				<div className={classNames(styles.sum)}>
-					Всего: <b>{Number(sum).toLocaleString('ru')}</b> руб
+					<div className={classNames(styles.total)}>
+						Всего: <b>{Number(sum).toLocaleString('ru')}</b> руб
+					</div>
+					<div className={classNames(styles.companies)}>
+						{companies.map((comp) => (
+							<div
+								key={comp}
+								className={classNames(styles.company)}
+							>
+								{comp}:{' '}
+								<span>
+									{Number(
+										invoices
+											.filter(
+												(invoice) =>
+													invoice.myCompany === comp
+											)
+											.reduce<number>(
+												(prev, invoice) =>
+													prev + +invoice.sum,
+												0
+											)
+									).toLocaleString('ru') + ''}{' '}
+								</span>
+								руб
+							</div>
+						))}
+					</div>
 				</div>
 				<div className={classNames(styles.count)}>
-					Всего оплат: <span>{invoices.length}</span>
+					<div className={classNames(styles.total)}>
+						Всего оплат: <span>{invoices.length}</span>
+					</div>
+					<div className={classNames(styles.companies)}>
+						{companies.map((comp) => (
+							<div
+								key={comp}
+								className={classNames(styles.company)}
+							>
+								{comp}:{' '}
+								<span>
+									{Number(
+										invoices.filter(
+											(invoice) =>
+												invoice.myCompany === comp
+										).length
+									).toLocaleString('ru') + ''}{' '}
+								</span>
+							</div>
+						))}
+					</div>
 				</div>
 			</div>
 			{dates.map((date) => (
