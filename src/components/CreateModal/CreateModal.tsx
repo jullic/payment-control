@@ -1,4 +1,11 @@
-import React, { ChangeEvent, FC, useEffect, useRef, useState } from 'react';
+import React, {
+	ChangeEvent,
+	FC,
+	KeyboardEvent,
+	useEffect,
+	useRef,
+	useState,
+} from 'react';
 import classNames from 'classnames';
 import { ICreateModalProps } from './CreateModal.props';
 import styles from './CreateModal.module.css';
@@ -101,6 +108,26 @@ export const CreateModal: FC<ICreateModalProps> = ({
 		window.localStorage.setItem('myCompany', e.target.value);
 	};
 
+	const onEnterKeyDownHandler = (e: KeyboardEvent<HTMLInputElement>) => {
+		if (e.key === 'Enter') {
+			const parent = e.currentTarget.parentElement;
+			const atr = Number(
+				e.currentTarget.getAttribute('data-create-input')
+			);
+			if (atr === 7) {
+				const newEl = parent?.querySelector(`[data-create-btn]`);
+				//@ts-ignore
+				newEl.click();
+				return;
+			}
+			const newEl = parent?.querySelector(
+				`[data-create-input="${atr + 1}"]`
+			);
+			//@ts-ignore
+			newEl.focus();
+		}
+	};
+
 	useEffect(() => {
 		if (+timeout < 0) {
 			setTimeout('0');
@@ -142,11 +169,15 @@ export const CreateModal: FC<ICreateModalProps> = ({
 					className={classNames(styles.wrapper)}
 				>
 					<Input
+						onKeyDown={onEnterKeyDownHandler}
+						data-create-input='1'
 						value={name}
 						onChange={(e) => setName(e.target.value)}
 						placeholder='Фирма'
 					/>
 					<Input
+						onKeyDown={onEnterKeyDownHandler}
+						data-create-input='2'
 						value={inn}
 						onChange={(e) => {
 							setInn(
@@ -167,24 +198,32 @@ export const CreateModal: FC<ICreateModalProps> = ({
 						))}
 					</select>
 					<Input
+						onKeyDown={onEnterKeyDownHandler}
+						data-create-input='3'
 						value={invoiceNumber}
 						autoFocus
 						onChange={(e) => setInvoiceNumber(e.target.value)}
 						placeholder='Номер накладной'
 					/>
 					<Input
+						onKeyDown={onEnterKeyDownHandler}
+						data-create-input='4'
 						value={sum}
 						onChange={(e) => setSum(e.target.value)}
 						type='number'
 						placeholder='Сумма'
 					/>
 					<Input
+						onKeyDown={onEnterKeyDownHandler}
+						data-create-input='5'
 						value={nds}
 						onChange={(e) => setNds(e.target.value)}
 						type='number'
 						placeholder='НДС'
 					/>
 					<Input
+						onKeyDown={onEnterKeyDownHandler}
+						data-create-input='6'
 						value={startDate}
 						onChange={(e) => {
 							if (e.target.value) {
@@ -195,6 +234,8 @@ export const CreateModal: FC<ICreateModalProps> = ({
 						placeholder='Дата прихода'
 					/>
 					<Input
+						onKeyDown={onEnterKeyDownHandler}
+						data-create-input='7'
 						value={timeout}
 						onChange={(e) => {
 							setTimeout(e.target.value);
@@ -213,7 +254,9 @@ export const CreateModal: FC<ICreateModalProps> = ({
 						type='date'
 						placeholder='Дата'
 					/>
-					<Button onClick={onCreateInvoiceHandler}>Записать</Button>
+					<Button data-create-btn onClick={onCreateInvoiceHandler}>
+						Записать
+					</Button>
 				</div>
 			</Modal>
 		</Portal>
