@@ -6,7 +6,6 @@ import { Invoice } from '../Invoice/Invoice';
 import { Button } from '../Button/Button';
 import { IInvoice } from '../../interfaces/invoice.interface';
 import { useAppSelector } from '../../hooks/redux.hooks';
-import { getDateBySplit } from '../../utils/date.utils';
 
 export const Invoices: FC<IInvoicesProps> = ({
 	className,
@@ -17,13 +16,15 @@ export const Invoices: FC<IInvoicesProps> = ({
 	const sum = invoices.reduce((prev, invoice) => prev + +invoice.sum, 0);
 	const { myCompanies } = useAppSelector((state) => state.suppliersReducer);
 
+	const companies = Array.from(
+		new Set(invoices.map((invoice) => invoice.myCompany))
+	);
+
 	const [day, month, year] = date.split('.');
 	const currentDate = new Date(+year, +month - 1, +day);
 	const isToday =
 		currentDate.toLocaleString('ru').split(', ')[0] ===
 		new Date().toLocaleString('ru').split(', ')[0];
-
-	console.log(isToday, currentDate, date);
 
 	const onCopyHandler = () => {
 		const copyText = getInvoiceCopyText(invoices, date, myCompanies);
@@ -31,7 +32,12 @@ export const Invoices: FC<IInvoicesProps> = ({
 	};
 
 	return (
-		<div className={classNames(styles.root, className)} {...props}>
+		<div
+			className={classNames(styles.root, className, {
+				[styles.today]: isToday,
+			})}
+			{...props}
+		>
 			<div className={classNames(styles.header)}>
 				<h2>{isToday ? `Сегодня (${date})` : date}</h2>
 				<Button onClick={onCopyHandler}>Скопировать</Button>
@@ -43,11 +49,58 @@ export const Invoices: FC<IInvoicesProps> = ({
 			</div>
 			<div className={classNames(styles.footer)}>
 				<div className={classNames(styles.sum)}>
-					Общая сумма: <span>{Number(sum).toLocaleString('ru')}</span>{' '}
-					руб
+					<div className={classNames(styles.total)}>
+						Общая сумма:{' '}
+						<span>{Number(sum).toLocaleString('ru')}</span> руб
+					</div>
+					<div className={classNames(styles.companies)}>
+						{companies.map((comp) => (
+							<div
+								key={comp}
+								className={classNames(styles.company)}
+							>
+								{comp}:{' '}
+								<span>
+									{Number(
+										invoices
+											.filter(
+												(invoice) =>
+													invoice.myCompany === comp
+											)
+											.reduce<number>(
+												(prev, invoice) =>
+													prev + +invoice.sum,
+												0
+											)
+									).toLocaleString('ru') + ''}{' '}
+								</span>
+								руб
+							</div>
+						))}
+					</div>
 				</div>
 				<div className={classNames(styles.count)}>
-					Всего оплат: <span>{invoices.length}</span>
+					<div className={classNames(styles.total)}>
+						Всего оплат: <span>{invoices.length}</span>
+					</div>
+					<div className={classNames(styles.companies)}>
+						{companies.map((comp) => (
+							<div
+								key={comp}
+								className={classNames(styles.company)}
+							>
+								{comp}:{' '}
+								<span>
+									{Number(
+										invoices.filter(
+											(invoice) =>
+												invoice.myCompany === comp
+										).length
+									).toLocaleString('ru') + ''}{' '}
+								</span>
+							</div>
+						))}
+					</div>
 				</div>
 			</div>
 		</div>
@@ -89,8 +142,12 @@ const getInvoiceCopyText = (
 		if (comp.values.length === 0) {
 			continue;
 		}
-		text = text + `${comp.name}: \n\n\t${comp.values.join('\n\t')}`;
-		text = text + '\n\n';
+		text =
+			text +
+			`${comp.name}: \n\n\t${comp.values
+				.map((val) => `- ${val}`)
+				.join('\n\t')}`;
+		text = text + '\n\n\n';
 	}
 	return text;
 };
